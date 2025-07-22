@@ -1,0 +1,40 @@
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+enum StatusTask {
+  PENDENTE
+  CONCLUIDA
+}
+
+model User {
+  id Int @id @default(autoincrement())
+  email String @unique
+  name String
+  password String
+  tasks Task[]
+}
+
+model Task {
+  id Int @id @default(autoincrement())
+  description String
+  dueDate DateTime
+  status StatusTask @default(PENDENTE)
+  user User @relation(fields: [userId], references: [id])
+  userId Int
+  notifications Notification[]
+}
+
+model Notification {
+  id Int @id @default(autoincrement())
+  title String
+  message String
+  shippingTime DateTime
+  task Task @relation(fields: [taskId], references: [id])
+  taskId Int
+}
