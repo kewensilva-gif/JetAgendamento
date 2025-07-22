@@ -22,6 +22,7 @@ model User {
 
 model Task {
   id Int @id @default(autoincrement())
+  title String
   description String
   dueDate DateTime
   status StatusTask @default(PENDENTE)
