@@ -1,0 +1,36 @@
+{
+  "name": "jetagendamento",
+  "version": "1.0.0",
+  "description": "",
+  "homepage": "https://github.com/kewensilva-gif/JetAgendamento#readme",
+  "bugs": {
+    "url": "https://github.com/kewensilva-gif/JetAgendamento/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/kewensilva-gif/JetAgendamento.git"
+  },
+  "license": "MIT",
+  "author": "Kewen Silva",
+  "type": "commonjs",
+  "main": "index.js",
+  "scripts": {
+    "build": "tsc",
+    "start": "node dist/index.js",
+    "dev": "nodemon --exec ts-node src/index.ts"
+  },
+  "dependencies": {
+    "@prisma/client": "^6.12.0",
+    "cors": "^2.8.5",
+    "express": "^5.1.0"
+  },
+  "devDependencies": {
+    "@types/cors": "^2.8.19",
+    "@types/express": "^5.0.3",
+    "@types/node": "^24.1.0",
+    "nodemon": "^3.1.10",
+    "prisma": "^6.12.0",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.8.3"
+  }
+}
