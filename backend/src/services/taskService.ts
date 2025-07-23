@@ -7,7 +7,7 @@ interface ICreateTaskData {
     userId: number;
 }
 
-export const createTask = async ({ title, description, dueDate, userId }: ICreateTaskData) => {
+export const create = async ({ title, description, dueDate, userId }: ICreateTaskData) => {
     const userExists = await prisma.user.findUnique({
         where: { id: userId },
     });
@@ -27,7 +27,7 @@ export const createTask = async ({ title, description, dueDate, userId }: ICreat
     return newTask;
 };
 
-export const listTasks = async () => {
+export const list = async () => {
     const allTasks = await prisma.task.findMany();
     console.log(allTasks)
     return allTasks;

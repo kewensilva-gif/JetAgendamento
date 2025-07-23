@@ -1,10 +1,10 @@
 import { Request, Response } from 'express';
 import * as userService from '../services/userService';
 
-export const handleCreateUser = async (req: Request, res: Response): Promise<void> => {
+export const create = async (req: Request, res: Response): Promise<void> => {
   try {
       const { name, email } = req.body;
-      const newUser = await userService.createUser({ name, email });
+      const newUser = await userService.create({ name, email });
       res.status(201).json(newUser);
   } catch (error: any) {
     console.error('Erro ao criar usuário:', error.message || error);
