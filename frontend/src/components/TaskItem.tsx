@@ -1,5 +1,5 @@
 import React from 'react';
-import type { ITask } from '../types/entities';
+import type { ITask } from '../types/Entities';
 
 const cardStyle: React.CSSProperties = {
   border: '1px solid #ccc',

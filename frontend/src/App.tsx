@@ -1,19 +1,23 @@
-import TaskList from './components/TaskList';
-
-const appStyle: React.CSSProperties = {
-  fontFamily: 'sans-serif',
-  maxWidth: '800px',
-  margin: '0 auto',
-  padding: '20px',
-};
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { AuthProvider } from './context/AuthContext';
+import { ProtectedRoute } from './middleware/ProtectedRoute';
+import LoginPage from './pages/auth/LoginPage';
+import HomePage from './pages/HomePage';
 
 function App() {
   return (
-    <div style={appStyle}>
-      <h1>Painel de Tarefas</h1>
-      <TaskList />
-    </div>
-  )
+    <BrowserRouter>
+      <AuthProvider>
+        <Routes>
+          <Route path="/login" element={<LoginPage />} />
+          <Route path="/" element={<HomePage />} />
+          <Route path="/" element={<ProtectedRoute />}>
+              {/* Rotas protegidas aqui dentro */}
+              {/* <Route index element={<HomePage />} /> */}
+          </Route>
+        </Routes>
+      </AuthProvider>
+    </BrowserRouter>
+  );
 }
-
-export default App
+export default App;
