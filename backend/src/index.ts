@@ -3,7 +3,7 @@ import cors from 'cors';
 import apiRoutes from './routes/apiRoutes';
 
 const app = express();
-const PORT: number = 3001;
+const PORT: number = Number(process.env.PORT);
 
 app.use(cors());
 app.use(express.json());
