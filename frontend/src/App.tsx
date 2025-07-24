@@ -3,21 +3,28 @@ import { AuthProvider } from './context/AuthContext';
 import { ProtectedRoute } from './middleware/ProtectedRoute';
 import LoginPage from './pages/auth/LoginPage';
 import HomePage from './pages/HomePage';
+import Header from './components/Header';
 
 function App() {
   return (
     <BrowserRouter>
       <AuthProvider>
-        <Routes>
-          <Route path="/login" element={<LoginPage />} />
-          <Route path="/" element={<HomePage />} />
-          <Route path="/" element={<ProtectedRoute />}>
-              {/* Rotas protegidas aqui dentro */}
+        <Header />
+        <main>
+          <Routes>
+            <Route path="/login" element={<LoginPage />} />
+            <Route path="/" element={<HomePage />} />
+
+            {/* Rotas protegidas */}
+            <Route path="/" element={<ProtectedRoute />}>
               {/* <Route index element={<HomePage />} /> */}
-          </Route>
-        </Routes>
+              {/* outras rotas protegidas podem vir aqui */}
+            </Route>
+          </Routes>
+        </main>
       </AuthProvider>
     </BrowserRouter>
   );
 }
+
 export default App;

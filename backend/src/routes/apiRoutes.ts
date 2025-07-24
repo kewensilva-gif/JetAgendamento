@@ -2,7 +2,7 @@ import { Router } from 'express';
 import * as taskController from '../controllers/taskController';
 import * as userController from '../controllers/userController';
 import * as authController from '../controllers/authController';
-import { authMiddleware } from '../middleware/authmiddleware';
+import { authMiddleware } from '../middleware/authMiddleware';
 
 const router = Router();
 
