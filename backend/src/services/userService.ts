@@ -18,5 +18,5 @@ export const create = async ({ name, email, password }: ICreateUserData) => {
         },
     });
 
-    return newUser;
+    return { name, email } = newUser;
 };
