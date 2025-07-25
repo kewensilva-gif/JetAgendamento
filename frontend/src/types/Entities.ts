@@ -6,6 +6,7 @@ export interface IUser {
 
 export interface ITask {
   id: number;
+  title: string;
   description: string;
   dueDate: string;
   status: string;

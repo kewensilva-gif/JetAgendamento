@@ -27,7 +27,8 @@ const TaskItem: React.FC<TaskItemProps> = ({ task }) => {
 
   return (
     <div style={cardStyle}>
-      <h3>{task.description}</h3>
+      <h3>{task.title}</h3>
+      <p>{task.description}</p>
       <p>
         <strong>Status: </strong> 
         <span style={{...statusStyle, backgroundColor: isPendente ? '#f39c12' : '#2ecc71'}}>
