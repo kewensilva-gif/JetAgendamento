@@ -1,5 +1,6 @@
 import { prisma } from '../database/prismaClient';
 import { notificationQueue } from '../config/queue';
+import { StatusTask } from '@prisma/client';
 
 interface ICreateTaskData {
     title: string;
@@ -29,9 +30,9 @@ export const create = async ({ title, description, dueDate, userId }: ICreateTas
     // --- Lógica de Agendamento ---
     const jobTime = new Date(dueDate).getTime();
     const currentTime = Date.now();
-    const fiveMinutesInMs = 5 * 60 * 1000;
-    const delay = jobTime - currentTime - fiveMinutesInMs;
+    const fiveMinutesInMs = 5 * 60 * 1000;   
 
+    const notificationDelay = jobTime - currentTime - fiveMinutesInMs;
     // console.log("--- DEBUG DE AGENDAMENTO ---");
     // console.log(`Data da Tarefa (dueDate): ${new Date(dueDate)}`);
     // console.log(`Hora da Tarefa (ms):     ${jobTime}`);
@@ -41,19 +42,46 @@ export const create = async ({ title, description, dueDate, userId }: ICreateTas
     // console.log("----------------------------");
 
     // Só adiciona o job se o horário for no futuro
-    if (delay > 0) {
+    if (notificationDelay > 0) {
         await notificationQueue.add(
-            `Notificação para: ${newTask.title}`,
+            'send-notification',
             { taskId: newTask.id },
-            { delay }
+            { delay: notificationDelay }
         );
-        // console.log(`Job de notificação agendado para a tarefa ${newTask.id} com delay de ${delay}ms`);
+        console.log(`Job de NOTIFICAÇÃO agendado para a tarefa ${newTask.id}.`);
+    }
+
+    const statusUpdateDelay = jobTime - currentTime;
+    if (statusUpdateDelay >= 0) {
+        await notificationQueue.add(
+            'update-status-to-concluida',
+            { taskId: newTask.id },
+            { delay: statusUpdateDelay }
+        );
+        console.log(`Atualização do status da tarefa ${newTask.title+ ' - ' + newTask.id}.`);
     }
 
     return newTask;
 };
 
 export const list = async () => {
-    const allTasks = await prisma.task.findMany();
+    const allTasks = await prisma.task.findMany({orderBy: { id: 'desc' }});
     return allTasks;
 };
+
+export const changeStatus = async (taskId: number, status: StatusTask) => {
+    const task = await prisma.task.findUnique({
+        where: { id: taskId },
+    });
+
+    if (!task) {
+        throw new Error('Tarefa não encontrada');
+    }
+
+    const updatedTask = await prisma.task.update({
+        where: { id: taskId },
+        data: { status },
+    });
+
+    return updatedTask;
+}
