@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { createTask } from '../../services/Api';
+import { createTask } from '../services/Api';
 
 function CreateTaskForm() {
   const [formData, setFormData] = useState({
@@ -50,6 +50,7 @@ function CreateTaskForm() {
     if (validateForm()) {
       try {
         formData['userId'] = JSON.parse(localStorage.getItem('@App:user') || '{}').id;
+        console.log('Dados da tarefa:', formData);
         await createTask(formData);
         alert('Tarefa criada com sucesso!');
         setFormData({ title: '', description: '', dueDate: '', userId: '' });

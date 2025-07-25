@@ -5,7 +5,7 @@ import LoginPage from './pages/auth/LoginPage';
 import RegisterPage from './pages/auth/RegisterPage';
 import HomePage from './pages/HomePage';
 import Header from './components/Header';
-import CreateTaskForm from './pages/auth/CreateTaskForm'; // Verifique se o caminho está correto
+import CreateTaskForm from './pages/CreateTaskForm';
 
 function App() {
   return (
