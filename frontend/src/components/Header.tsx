@@ -13,12 +13,12 @@ const Header: React.FC = () => {
 
   return (
     <header className="bg-gray-800 text-white shadow-lg">
-      <div className="container mx-auto flex items-center justify-between p-4">
+      <div className="container mx-auto flex items-center justify-between p-4 flex-wrap">
         <Link to="/" className="text-2xl font-bold tracking-wider hover:text-blue-400 transition-colors duration-300">
           JetAgendamentos
         </Link>
 
-        <nav className="flex items-center gap-6">
+        <nav className="flex items-center gap-6 flex-wrap">
           {isAuthenticated ? (
             <>
               <span className="text-gray-300">
