@@ -1,6 +1,5 @@
 import { Request, Response } from 'express';
 import * as userService from '../services/userService';
-import { resourceUsage } from 'process';
 
 export const create = async (req: Request, res: Response): Promise<void> => {
   try {
