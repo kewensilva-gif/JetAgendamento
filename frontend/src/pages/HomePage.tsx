@@ -10,7 +10,7 @@ const appStyle: React.CSSProperties = {
 function DashboardPage() {
   return (
     <div style={appStyle}>
-      <h1>Painel de Tarefas</h1>
+      <h1 className='text-3xl font-bold text-center text-gray-90 mb-4'>Painel de Tarefas</h1>
       <TaskList />
     </div>
   )
