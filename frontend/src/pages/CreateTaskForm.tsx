@@ -71,9 +71,11 @@ function CreateTaskForm() {
       
       <form onSubmit={handleSubmit} className="space-y-4">
         <div>
-          <label htmlFor="title" className="block text-sm font-medium text-gray-700">Título</label>
+          <label htmlFor="title" className="block text-sm font-medium text-gray-700">Título<span className='text-red-600'>*</span></label>
           <input
             type="text" id="title" name="title" value={formData.title} onChange={handleChange}
+            required
+            placeholder="Tirar o lixo"
             className={`w-full px-3 py-2 mt-1 border rounded-md shadow-sm ${errors.title ? 'border-red-500' : 'border-gray-300'} focus:outline-none focus:ring-2 focus:ring-blue-500`}
           />
           {errors.title && <p className="mt-1 text-xs text-red-500">{errors.title}</p>}
@@ -88,11 +90,12 @@ function CreateTaskForm() {
         </div>
         
         <div>
-          <label htmlFor="dueDate" className="block text-sm font-medium text-gray-700">Data e Hora de Vencimento</label>
+          <label htmlFor="dueDate" className="block text-sm font-medium text-gray-700">Data e Hora de Vencimento<span className='text-red-600'>*</span></label>
           <input
             type="datetime-local" 
             id="dueDate" 
             name="dueDate" 
+            required
             value={formData.dueDate} 
             onChange={handleChange}
             className={`w-full px-3 py-2 mt-1 border rounded-md shadow-sm ${errors.dueDate ? 'border-red-500' : 'border-gray-300'} focus:outline-none focus:ring-2 focus:ring-blue-500`}

@@ -77,26 +77,32 @@ function RegisterPage() {
         
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
-            <label htmlFor="name" className="block text-sm font-medium text-gray-700">Nome</label>
+            <label htmlFor="name" className="block text-sm font-medium text-gray-700">Nome<span className='text-red-600'>*</span></label>
             <input
               type="text" id="name" name="name" value={formData.name} onChange={handleChange}
+              placeholder="João da Silva"
+              required
               className={`w-full px-3 py-2 mt-1 border rounded-md shadow-sm ${errors.name ? 'border-red-500' : 'border-gray-300'} focus:outline-none focus:ring-2 focus:ring-blue-500`}
             />
             {errors.name && <p className="mt-1 text-xs text-red-500">{errors.name}</p>}
           </div>
 
           <div>
-            <label htmlFor="email" className="block text-sm font-medium text-gray-700">Email</label>
+            <label htmlFor="email" className="block text-sm font-medium text-gray-700">Email<span className='text-red-600'>*</span></label>
             <input
               type="email" id="email" name="email" value={formData.email} onChange={handleChange}
+              placeholder="seu.email@exemplo.com"
+              required
               className={`w-full px-3 py-2 mt-1 border rounded-md shadow-sm ${errors.email ? 'border-red-500' : 'border-gray-300'} focus:outline-none focus:ring-2 focus:ring-blue-500`}
             />
             {errors.email && <p className="mt-1 text-xs text-red-500">{errors.email}</p>}
           </div>
 
           <div>
-            <label htmlFor="password" className="block text-sm font-medium text-gray-700">Senha</label>
+            <label htmlFor="password" className="block text-sm font-medium text-gray-700">Senha<span className='text-red-600'>*</span></label>
             <input
+              placeholder="••••••••"
+              required
               type="password" id="password" name="password" value={formData.password} onChange={handleChange}
               className={`w-full px-3 py-2 mt-1 border rounded-md shadow-sm ${errors.password ? 'border-red-500' : 'border-gray-300'} focus:outline-none focus:ring-2 focus:ring-blue-500`}
             />
