@@ -113,6 +113,27 @@ JetAgendamento/
    npm install
    npm run dev
    ```
+## Testes de Integração
+O projeto backend conta com testes de integração para garantir a confiabilidade das rotas críticas de autenticação.
+
+- **Ferramentas**: Jest e Supertest.
+- **Cobertura**: Os testes cobrem o fluxo completo de registro de usuário (POST /user), validando:
+    - Criação de usuário com sucesso (Status 201).
+    - Bloqueio de registro com email duplicado (Status 409).
+    - Login com credenciais válidas e retorno de um token JWT
+
+### Como Rodar os Testes
+Certifique-se de estar no diretório backend/.
+
+1. Para o subir o serviço do redis:
+    ```sh
+    docker-compose up -d redis
+    ```
+2. Execute o comando:
+   ```sh
+    npm test
+   ```
+O comando irá configurar um banco de dados de teste separado (test.db), aplicar as migrações e rodar todos os testes de forma isolada, sem impactar seu banco de dados de desenvolvimento.
 
 ## Observações
 - O banco de dados padrão é SQLite, salvo em `backend/prisma/dev.db`.
