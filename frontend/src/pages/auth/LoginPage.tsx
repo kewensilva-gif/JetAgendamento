@@ -1,4 +1,3 @@
-// src/pages/LoginPage.tsx
 import React, { useState } from 'react';
 import { loginUser } from '../../services/Api';
 import { useAuth } from '../../context/AuthContext';
@@ -11,32 +10,29 @@ function LoginPage() {
   const navigate = useNavigate();
 
   const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
+  e.preventDefault();
     try {
-      const { token } = await loginUser({ email, password });
-      login(token);
-      navigate('/'); // Redireciona para o painel principal após o login
+      const { token, user } = await loginUser({ email, password });
+      if (token && user) {
+        login(token, user);
+        navigate('/');
+      }
     } catch (error) {
       alert('Erro ao fazer login: verifique seu email e senha.');
     }
   };
 
   return (
-    // Container principal para centralizar o conteúdo
     <div className="flex items-center justify-center min-h-screen bg-gray-100">
       
-      {/* Card do formulário */}
       <div className="w-full max-w-md p-8 space-y-6 bg-white rounded-lg shadow-md">
         
-        {/* Título */}
         <h1 className="text-3xl font-bold text-center text-gray-900">
           Acessar sua Conta
         </h1>
         
-        {/* Formulário */}
         <form onSubmit={handleSubmit} className="space-y-6">
-          
-          {/* Campo de Email */}
+  
           <div>
             <label 
               htmlFor="email" 
@@ -55,8 +51,7 @@ function LoginPage() {
               onChange={e => setEmail(e.target.value)}
             />
           </div>
-          
-          {/* Campo de Senha */}
+     
           <div>
             <label 
               htmlFor="password" 
@@ -76,16 +71,23 @@ function LoginPage() {
             />
           </div>
           
-          {/* Botão de Envio */}
           <div>
             <button 
               type="submit" 
-              className="w-full px-4 py-2 font-bold text-white bg-blue-600 rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-colors duration-300"
+              className="cursor-pointer w-full px-4 py-2 font-bold text-white bg-blue-600 rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-colors duration-300"
             >
               Entrar
             </button>
           </div>
-
+          <div className="text-sm text-center text-gray-600">
+            Não tem uma conta? 
+            <a 
+              href="/register" 
+              className="font-medium text-blue-600 hover:text-blue-500"
+            >
+              Crie uma agora
+            </a>
+          </div>
         </form>
       </div>
     </div>

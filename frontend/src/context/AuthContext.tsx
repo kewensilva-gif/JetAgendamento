@@ -1,37 +1,53 @@
-// src/context/AuthContext.tsx
+
 import React, { createContext, useState, useContext, useEffect } from 'react';
+
+interface IUser {
+  id: number;
+  name: string | null;
+  email: string;
+}
 
 interface IAuthContextData {
     isAuthenticated: boolean;
-    token: string | null;
-    login: (token: string) => void;
+    user: IUser | null; // <-- Adiciona o usuário ao contexto
+    loading: boolean;
+    login: (token: string, userData: IUser) => void; // <-- Altera a assinatura do login
     logout: () => void;
 }
 
 const AuthContext = createContext<IAuthContextData>({} as IAuthContextData);
 
 export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-    const [token, setToken] = useState<string | null>(null);
+    const [user, setUser] = useState<IUser | null>(null);
+    const [loading, setLoading] = useState(true);
 
     useEffect(() => {
-        const storedToken = localStorage.getItem('@App:token');
-        if (storedToken) {
-            setToken(storedToken);
+        try {
+            const storedToken = localStorage.getItem('@App:token');
+            const storedUser = localStorage.getItem('@App:user');
+
+            if (storedToken && storedUser) {
+                setUser(JSON.parse(storedUser));
+            }
+        } finally {
+            setLoading(false);
         }
     }, []);
 
-    const login = (newToken: string) => {
-        setToken(newToken);
-        localStorage.setItem('@App:token', newToken);
+    const login = (token: string, userData: IUser) => {
+        localStorage.setItem('@App:token', token);
+        localStorage.setItem('@App:user', JSON.stringify(userData));
+        setUser(userData);
     };
 
     const logout = () => {
-        setToken(null);
         localStorage.removeItem('@App:token');
+        localStorage.removeItem('@App:user');
+        setUser(null);
     };
 
     return (
-        <AuthContext.Provider value={{ isAuthenticated: !!token, token, login, logout }}>
+        <AuthContext.Provider value={{ isAuthenticated: !!user, user, loading, login, logout }}>
             {children}
         </AuthContext.Provider>
     );
