@@ -1,4 +1,5 @@
 import { prisma } from '../database/prismaClient';
+import { notificationQueue } from '../config/queue';
 
 interface ICreateTaskData {
     title: string;
@@ -24,11 +25,35 @@ export const create = async ({ title, description, dueDate, userId }: ICreateTas
             userId,
         },
     });
+
+    // --- Lógica de Agendamento ---
+    const jobTime = new Date(dueDate).getTime();
+    const currentTime = Date.now();
+    const fiveMinutesInMs = 5 * 60 * 1000;
+    const delay = jobTime - currentTime - fiveMinutesInMs;
+
+    // console.log("--- DEBUG DE AGENDAMENTO ---");
+    // console.log(`Data da Tarefa (dueDate): ${new Date(dueDate)}`);
+    // console.log(`Hora da Tarefa (ms):     ${jobTime}`);
+    // console.log(`Hora Atual (ms):          ${currentTime}`);
+    // console.log(`Delay calculado (ms):     ${delay}`);
+    // console.log(`O job será agendado?      ${delay > 0}`);
+    // console.log("----------------------------");
+
+    // Só adiciona o job se o horário for no futuro
+    if (delay > 0) {
+        await notificationQueue.add(
+            `Notificação para: ${newTask.title}`,
+            { taskId: newTask.id },
+            { delay }
+        );
+        // console.log(`Job de notificação agendado para a tarefa ${newTask.id} com delay de ${delay}ms`);
+    }
+
     return newTask;
 };
 
 export const list = async () => {
     const allTasks = await prisma.task.findMany();
-    console.log(allTasks)
     return allTasks;
 };
