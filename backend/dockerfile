@@ -1,0 +1,56 @@
+# Estágio de Build
+FROM node:18-alpine AS builder
+WORKDIR /usr/src/app
+
+# Instala dependências do sistema necessárias
+RUN apk add --no-cache openssl
+
+# Copia arquivos de dependências
+COPY package*.json ./
+COPY prisma ./prisma/
+
+# Instala dependências
+# Nota: Prisma CLI é uma devDependency, então instalamos todas aqui.
+RUN npm install
+RUN npm cache clean --force
+
+# Gera o Prisma Client especificamente para linux-musl
+RUN npx prisma generate
+
+# Copia o código fonte e constrói a aplicação
+COPY . .
+RUN npm run build
+
+# Limpa dependências de desenvolvimento para reduzir o tamanho da imagem
+RUN npm prune --production
+
+# Estágio de Produção
+FROM node:18-alpine
+WORKDIR /usr/src/app
+
+# Instala dependências do sistema necessárias para o Prisma
+RUN apk add --no-cache openssl
+
+# Copia os arquivos necessários do estágio de build
+COPY --from=builder /usr/src/app/dist ./dist
+COPY --from=builder /usr/src/app/node_modules ./node_modules
+COPY --from=builder /usr/src/app/package*.json ./
+COPY --from=builder /usr/src/app/prisma ./prisma
+
+# Copia o script de entrypoint
+COPY --from=builder /usr/src/app/entrypoint.sh .
+
+# Cria diretório para o banco de dados e ajusta permissões
+RUN mkdir -p /usr/src/app/data && \
+    chmod +x ./entrypoint.sh && \
+    chown -R node:node /usr/src/app
+
+USER node
+
+EXPOSE 3001
+
+# Define o entrypoint que rodará as migrações
+ENTRYPOINT ["/usr/src/app/entrypoint.sh"]
+
+# Comando padrão para iniciar a API (será executado pelo entrypoint)
+CMD ["node", "dist/server.js"]
