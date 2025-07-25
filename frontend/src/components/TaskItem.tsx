@@ -22,7 +22,7 @@ interface TaskItemProps {
 }
 
 const TaskItem: React.FC<TaskItemProps> = ({ task }) => {
-  const formattedData = new Date(task.dueDate).toLocaleDateString('pt-BR');
+  const formattedData = new Date(task.dueDate).toLocaleString('pt-BR');
   const isPendente = task.status === 'PENDENTE';
 
   return (

@@ -1,4 +1,3 @@
-// src/components/TaskList.tsx
 import React, { useEffect, useState } from 'react';
 import { getTasks } from '../services/Api';
 import type { ITask } from '../types/Entities';
