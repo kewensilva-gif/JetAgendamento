@@ -1,6 +1,7 @@
 import request from 'supertest';
 import { app } from '../app';
 import { prisma } from '../database/prismaClient';
+import { notificationQueue } from '../config/queue';
 
 describe('Autenticação e Registro de Usuário', () => {
   // Limpa o banco de dados de teste após cada teste
@@ -11,7 +12,8 @@ describe('Autenticação e Registro de Usuário', () => {
 
   // Fecha a conexão com o banco após todos os testes
   afterAll(async () => {
-    await prisma.$disconnect();
+    await notificationQueue.close(); // Fecha a conexão com o Redis
+    await prisma.$disconnect(); // Fecha a conexão com o banco
   });
 
   it('deve ser capaz de registrar um novo usuário', async () => {
@@ -51,7 +53,7 @@ describe('Autenticação e Registro de Usuário', () => {
       .send({
         name: 'Usuário Duplicado',
         email: 'duplicado@exemplo.com',
-        passoword: 'outrasenha',
+        password: 'outrasenha',
       });
       
     // Espera um status de conflito
