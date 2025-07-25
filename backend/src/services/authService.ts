@@ -10,8 +10,7 @@ interface ILoginData {
 export const login = async ({ email, password }: ILoginData) => {
     const user = await prisma.user.findUnique({ where: { email } });
     if (!user) throw new Error('Email ou senha inválidos.');
-    console.log("password: ", password)
-    console.log("user: ", user.password)
+    
     const validPassword = await bcrypt.compare(password, user.password);
     if (!validPassword) throw new Error('Email ou senha inválidos.');
 
@@ -20,5 +19,12 @@ export const login = async ({ email, password }: ILoginData) => {
 
     const token = jwt.sign({ id: user.id }, secret, { expiresIn: '1d' });
 
-    return { token };
+    return { 
+        token, 
+        user: {
+            id: user.id,
+            nome: user.name,
+            email: user.email
+        } 
+    };
 };
